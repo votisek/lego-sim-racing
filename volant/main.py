@@ -8,11 +8,11 @@ import ev3dev2.motor as Motor
 from ev3dev2.sound import Sound
 import time
 
-left_transmission = Sensor.TouchSensor(SensorPort.INPUT_1)
-right_transmission = Sensor.TouchSensor(SensorPort.INPUT_2)
+left_transmission = Sensor.TouchSensor(SensorPort.INPUT_2)
+right_transmission = Sensor.TouchSensor(SensorPort.INPUT_1)
 volant = Sensor.GyroSensor(SensorPort.INPUT_3)
 sound = Sound()
-print("init complete")
+print("init complete ol")
 
 
 
@@ -63,10 +63,10 @@ def get_data():
 
 def start_client():
     calibrate()
-    
+    print("calibrovano")
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    client_socket.connect(("192.168.216.242", 5656))
-    
+    client_socket.connect(("192.168.195.38", 5656))
+    print("pripojeno")
 
     try:
         # Odeslání identifikační zprávy na server
@@ -93,7 +93,8 @@ if __name__ == "__main__":
     device = "volant"
     valid_data = bool()
     volant_data = [-90, 90]
-    debug = bool(input("debug mode: "))
+    # debug = bool(input("debug mode: "))
+    debug = True
     # volant_data in format: [max_left, max_right]
-    set_debug(debug)
+    # set_debug(debug)
     start_client()

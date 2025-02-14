@@ -1,19 +1,45 @@
 #!/usr/bin/env python3
 import socket
 import threading
-import vgamepad
+import vgamepad as g
 
 # Nastavení serveru
 SERVER_HOST = "0.0.0.0"
 SERVER_PORT = 5656
-gp = vgamepad.VX360Gamepad()
+gp = g.VX360Gamepad()
 
 def control(data):
-    if '"]' not in str(data):
-        pass
+    data = list(data)
+    dev = None
+    if 5 > len(data) > 2:
+        for i in range(3):
+            data.pop()
+            if len(data) == 2:
+                dev = "pedaly"
+                break
+            else:
+                pass
+    elif len(data) > 5:
+        for i in range(20):
+            data.pop()
+            if len(data) == 5:
+                dev = "volant"
+                break
+            else:
+                pass
     else:
-        data = str(data).split('"]', 1).pop()
-    print(data)
+        pass
+    match dev:
+        case "volant":
+            data_left_transmission, data_right_transmission, data_volant, _, _ = data
+            match data_left_transmission:
+                case 1:
+                    gp.press_button(g.XUSB_BUTTON.XUSB_GAMEPAD_LEFT_SHOULDER)
+                case 0:
+                    gp.release_button(g.XUSB_BUTTON.XUSB_GAMEPAD_LEFT_SHOULDER)
+                case _:
+                    pass
+            gp.update()
 
 # Vytvoření TCP/IP socketu
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
