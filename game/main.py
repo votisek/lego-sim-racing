@@ -20,7 +20,8 @@ def calculate_volant(volant):
 
 def control(data):
     try:
-        str(data).strip("[]") = list(map(int, data.split(',')))  # Convert input string to list of integers
+        data = str(data).strip("[]")
+        data = list(map(int, data.split(',')))  # Convert input string to list of integers
     except ValueError:
         print("Error: Input must be comma-separated integers.")
         return
