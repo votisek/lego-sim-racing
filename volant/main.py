@@ -65,7 +65,7 @@ def start_client():
     calibrate()
     print("calibrovano")
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    client_socket.connect(("192.168.195.38", 5656))
+    client_socket.connect(("192.168.94.38", 5656))
     print("pripojeno")
 
     try:

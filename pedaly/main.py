@@ -24,7 +24,7 @@ def get_data():
 def start_client():
     
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    client_socket.connect(("192.168.128.242", 5656))
+    client_socket.connect(("192.168.94.38", 5656))
     
 
     try:
