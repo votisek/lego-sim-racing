@@ -18,13 +18,13 @@ device = "pedaly"
 def get_data():
     data_left_pedal = left_pedal.is_pressed
     data_right_pedal = right_pedal.is_pressed
-    return [data_left_pedal, data_right_pedal]
+    return str(data_left_pedal) + "," + str(data_right_pedal)
 
 
 def start_client():
     
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    client_socket.connect(("192.168.94.38", 5656))
+    client_socket.connect(("192.168.102.242", 5656))
     
 
     try:
@@ -34,9 +34,8 @@ def start_client():
         while True:
             # Zadání zprávy od uživatele nebo automatické odeslání
             dtata = get_data()
-            client_socket.send(str(dtata).encode("utf-8"))
-            print(dtata)
-            time.sleep(0.02)
+            client_socket.send(dtata.encode("utf-8"))
+            time.sleep(0.1)
     except KeyboardInterrupt:
         print("Ukončuji spojení klávesou CTRL+C.")
     finally:

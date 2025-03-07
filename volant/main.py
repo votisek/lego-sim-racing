@@ -15,7 +15,6 @@ sound = Sound()
 print("init complete ol")
 
 
-
 def set_debug(mode):
     if mode:
         delay = input("Zadej delay mezi čtením ůdajů ze senzorů: ")
@@ -58,14 +57,15 @@ def get_data():
     data_left_transmission = left_transmission.is_pressed
     data_volant = get_volant()
     min_volant, max_volant = volant_data
-    return [data_left_transmission, data_right_transmission, data_volant, min_volant, max_volant]
+    dt = str(data_left_transmission)+","+str(data_right_transmission)+","+str(data_volant)+","+str(min_volant)+","+str(max_volant)
+    return dt
 
 
 def start_client():
     calibrate()
     print("calibrovano")
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    client_socket.connect(("192.168.94.38", 5656))
+    client_socket.connect(("192.168.102.242", 5656))
     print("pripojeno")
 
     try:
@@ -75,14 +75,14 @@ def start_client():
             while True:
                 # Odesílání na server s debug
                 data = get_data()
-                client_socket.send(str(data).encode("utf-8"))
+                client_socket.send(data.encode("utf-8"))
                 print(data)
                 time.sleep(0.1)
         else:
             while True:
                 # Odeslání na server bez debug
                 data = get_data()
-                client_socket.send(str(data).encode("utf-8"))
+                client_socket.send(data.encode("utf-8"))
                 time.sleep(0.1)
     except KeyboardInterrupt:
         print("Ukončuji spojení klávesou CTRL+C.")

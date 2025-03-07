@@ -19,8 +19,8 @@ def calculate_volant(volant):
         gp.left_joystick_float(float(volant/90), 0)
 
 def control(data):
+    print(data)
     try:
-        data = str(data).strip("[]")
         data = list(map(int, data.split(',')))  # Convert input string to list of integers
     except ValueError:
         print("Error: Input must be comma-separated integers.")

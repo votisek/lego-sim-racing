@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/home/robot/LeWhego/volant/main.py", line 100, in <module>
+    start_client()
+  File "/home/robot/LeWhego/volant/main.py", line 77, in start_client
+    data = get_data()
+  File "/home/robot/LeWhego/volant/main.py", line 60, in get_data
+    dt = data_left_transmission + "," + data_right_transmission + "," + data_volant + "," + min_volant + "," + max_volant
+TypeError: unsupported operand type(s) for +: 'int' and 'str'
