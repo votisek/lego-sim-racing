@@ -102,17 +102,3 @@ def handle_client(client_socket, address):
     finally:
         client_socket.close()
 
-def main():
-    print("Server je připraven přijímat spojení.")
-    try:
-        while True:
-            client_socket, address = server_socket.accept()
-            client_thread = threading.Thread(target=handle_client, args=(client_socket, address))
-            client_thread.start()
-    except KeyboardInterrupt:
-        print("\nServer ukončen klávesou CTRL+C.")
-    finally:
-        server_socket.close()
-
-if __name__ == "__main__":
-    main()

@@ -12,6 +12,13 @@ left_transmission = Sensor.TouchSensor(SensorPort.INPUT_2)
 right_transmission = Sensor.TouchSensor(SensorPort.INPUT_1)
 volant = Sensor.GyroSensor(SensorPort.INPUT_3)
 sound = Sound()
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+IP = '0.0.0.0'
+PORT = 5656
+SCAN_TIMEOUT = 0.05
+s.settimeout(SCAN_TIMEOUT)
+local_ip = socket.gethostbyname(socket.gethostname())
+network_prefix = '.'.join(local_ip.split('.')[:3])
 print("init complete ol")
 
 
@@ -33,8 +40,17 @@ def set_debug(mode):
         else:
             max_right = int(max_right)
         volant_data = [max_left, max_right]
-        
 
+def connect():
+    for i in range(0, 255):
+        try:
+            s.connect((f'{network_prefix}.{i}', PORT))
+            print(f"Found server at ip: {network_prefix}.{i}")
+            return (host_ip, PORT)
+        except (socket.timeout, ConnectionRefusedError):
+            print(f'No server found at ip: {network_prefix}.{i}')
+            continue
+    
 def calibrate():
 #    global volant_data  # Přidáno: označení, že volant_data je globální proměnná
     volant.reset()
@@ -64,30 +80,25 @@ def get_data():
 def start_client():
     calibrate()
     print("calibrovano")
-    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    client_socket.connect(("192.168.102.242", 5656))
+    client_socket.connect(connect())
     print("pripojeno")
 
     try:
         # Odeslání identifikační zprávy na server
         client_socket.send(device.encode("utf-8"))
-        if debug:
-            while True:
-                # Odesílání na server s debug
-                data = get_data()
-                client_socket.send(data.encode("utf-8"))
-                print(data)
-                time.sleep(0.1)
-        else:
-            while True:
-                # Odeslání na server bez debug
-                data = get_data()
-                client_socket.send(data.encode("utf-8"))
-                time.sleep(0.1)
+    
+        while True:
+            # Odesílání na server s debug
+            data = get_data()
+            client_socket.send(data.encode("utf-8"))
+            print(data)
+            time.sleep(0.1)
     except KeyboardInterrupt:
         print("Ukončuji spojení klávesou CTRL+C.")
     finally:
         client_socket.close()
+
+
 
 if __name__ == "__main__":
     device = "volant"
